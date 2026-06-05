@@ -4,34 +4,32 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: # Memunculkan tombol "Run workflow" manual di GitHub Actions
+  workflow_dispatch: 
 
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Ambil semua file dari repositori
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    # Step 2: Setup environment Python versi 3.10
+    # Tetap menggunakan versi 3.12 sesuai aturan submisi Anda
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.12'
+        python-version: '3.12' 
 
-    # Step 3: Proses instalasi library langsung (Tanpa membaca file requirements.txt)
+    # Perbaikan khusus Python 3.12: setuptools harus diinstal duluan di baris terpisah
     - name: Install Dependencies Directly
       run: |
         python -m pip install --upgrade pip
+        pip install "setuptools<70.0.0"
         pip install numpy pandas matplotlib seaborn scikit-learn plotly yellowbrick kagglehub
 
-    # Step 4: Jalankan skrip otomasi preprocessing Anda
     - name: Run Preprocessing Script
       run: python preprocessing/automate_Srie_Wahyudhanis_Hadis.py
 
-    # Step 5: Kirim balik file data_preprocessing.csv ke GitHub jika berhasil terbentuk
     - name: Commit and Push Preprocessed Data
       run: |
         git config --global user.name "ririhadis"
@@ -39,7 +37,6 @@ jobs:
         
         if [ -f data_preprocessing.csv ]; then
           git add data_preprocessing.csv
-          # [skip ci] digunakan agar proses push balik ini tidak memicu looping workflow berulang-ulang
           git commit -m "Automated update: data_preprocessing.csv [skip ci]" || echo "Tidak ada perubahan data baru"
           git push origin main
         else
