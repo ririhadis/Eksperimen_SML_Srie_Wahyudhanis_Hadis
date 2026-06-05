@@ -17,7 +17,7 @@ from sklearn.linear_model import LassoCV
 
 #fungsi preprocessing_lengkap
 def preprocessing_pipeline(csv_path):
-    df = pd.read_csv(csv_path):
+    df = pd.read_csv(csv_path)
 
     #Melihat negara mana saja yang memiki nilai nan pada gdp
     nan_gdp = df[df['gdp_usd'].isna()][['country','year']].drop_duplicates()
