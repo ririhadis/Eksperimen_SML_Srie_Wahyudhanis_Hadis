@@ -40,8 +40,8 @@ jobs:
         
     - name: Commit processed data
       run: |
-        git config --global user.name "ririhadis"
-        git config --global user.email "sriewahyudhanis.hadis@gmail.com"
+        git config --global user.name ${{ secrets.USERNAME }}
+        git config --global user.email ${{ secrets.EMAIL }}
 
         git add preprocessing/data_preprocessing.csv
         git commit -m 'Berhasil update dataset' || echo 'Dataset gagal diunggah'
